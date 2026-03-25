@@ -1,0 +1,22 @@
+{
+  "name": "little-princess-bot",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp Little Princess",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.3.0",
+    "@whiskeysockets/baileys": "^6.7.21",
+    "axios": "^1.6.0",
+    "pino": "^8.16.2",
+    "pino-pretty": "^10.2.3",
+    "qrcode-terminal": "^0.12.0",
+    "sql.js": "^1.10.3",
+    "ytdl-core": "^4.11.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
