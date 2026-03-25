@@ -898,7 +898,7 @@ async function connectToWhatsApp() {
         console.log('Scan QR code dengan WhatsApp untuk connect');
       }
       if (connection === 'open') {
-        console.log('✅ Little Princess siap dan terhubung!');
+        console.log('✅ CherlynBot siap dan terhubung!');
       } else if (connection === 'close') {
         const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
         console.log('❌ Koneksi ditutup. Alasan:', lastDisconnect?.error);
@@ -1008,8 +1008,17 @@ ${'⏭️ '.repeat(participantJids.length)} TAG ALL 🔔`;
         }
       }
 
-      // Menu command
-      if (lower === '.menu' || lower === 'menu' || lower === '.ksatriya' || lower === 'ksatriya' || lower === '.ksatriya') {
+      // Menu command - shows greeting only
+      if (lower === '.menu' || lower === 'menu') {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        const userNumber = sender.split('@')[0];
+        await socket.sendMessage(jid, { text: `Halo, ${userNumber}! Apa kabar? 😊 Apa yang bisa saya bantu hari ini?\n\n📅 ${dateStr}` });
+        return;
+      }
+
+      // Help command - shows full menu
+      if (lower === '.help' || lower === '.ksatriya' || lower === 'ksatriya') {
         await sendMenu(jid);
         return;
       }
@@ -2001,21 +2010,71 @@ async function sendMenu(jid) {
     const tmpImg = path.join(__dirname, 'banner_${Date.now()}.jpg');
     fs.writeFileSync(tmpImg, Buffer.from(imgRes.data));
 
-    const imgRes2 = await axiosInstance.get(config.bannerImage, { responseType: 'arraybuffer', timeout: 10000 });
-    const tmpImg2 = path.join(__dirname, 'banner2_${Date.now()}.jpg');
-    fs.writeFileSync(tmpImg2, Buffer.from(imgRes2.data));
-
     await socket.sendMessage(jid, {
       image: fs.readFileSync(tmpImg),
-      caption: '🎉 *Selamat datang di Little Princess Bot!*\n\n📢 Klik link di bawah untuk informasi lebih lanjut:',
-      contextInfo: {
-        externalAdReply: {
-          title: '📢 Lihat Saluran',
-          body: 'Klik untuk mengunjungi saluran kami',
-          mediaUrl: config.menuChannelLink || 'https://example.com',
-          mediaType: 1,
-          sourceUrl: config.menuChannelLink || 'https://example.com'
-        }
+      caption: '🎉 *Selamat datang di CherlynBot!*\n\n✨ Nikmati berbagai fitur menarik dari bot kami!'
+    });
+
+    const menuText = `˜”*°•.˜”*°• CherlynBot •°*”˜.~•°"˜
+
+『 *Menu bot:* 』
+
+❖ Downloader
+❖ AI Chat
+❖ Search  
+❖ Spiritual
+❖ Admin
+❖ Kalkulator
+
+⫷ *Downloader* ⫸
+> .youtube <link>
+> .tiktok <link>
+> .instagram <link>
+> .twitter <link>
+
+*Males?* kirim link doang
+Bot akan auto-detect!
+
+⫷ *AI MENU* ⫸
+> .gptchan <pertanyaan>
+
+⫷ *SEARCH MENU* ⫸
+> .search <query>
+> .pinterest <query>
+
+⫷ *UTILITY MENU* ⫸
+> .utility 
+
+⫷ *SPIRITUAL MENU* ⫸
+> .cekkhodam
+> .reminder
+> .liburanbesar
+> .quote
+
+⫷ *ADMIN MENU* ⫸
+> .admin
+> .kick <nomor>
+> .kudeta
+> .antilink <on|off>
+
+⫷ *GROUP MENU* ⫸
+> .tagall
+Tag semua member
+
+⫷ *Other menu* ⫸
+> .utility
+> .credit
+> .support`;
+
+    await socket.sendMessage(jid, { text: menuText });
+
+    if (fs.existsSync(tmpImg)) fs.unlinkSync(tmpImg);
+  } catch (e) {
+    console.error('Menu error:', e.message);
+    const fallback = '⫷ CherlynBot ⫸\n\n.youtube <link>\n.tiktok <link>\n.instagram <link>\n.twitter <link>\n\n.gptchan <pertanyaan>\n\n.search <query>\n.pinterest <query>\n\n.utility\n\n.cekkhodam\n.reminder\n.liburanbesar\n.quote\n\n:silo\n.admin\n.kick <nomor>\n.kudeta\n.antilink\n\n.tagall';
+    await socket.sendMessage(jid, { text: fallback });
+  }
+}
       }
     });
 
@@ -2116,7 +2175,7 @@ async function downloadYoutubeMsg(url, sock, jid) {
     
     await sock.sendMessage(jid, { 
       video: fs.readFileSync(tmp),
-      caption: '❖ YouTube - Little Princess' 
+      caption: '❖ YouTube - CherlynBot' 
     });
     
     if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
@@ -2152,7 +2211,7 @@ async function downloadTiktokMsg(url, sock, jid) {
           
           await sock.sendMessage(jid, { 
             video: fs.readFileSync(tmp),
-            caption: `❖ TikTok - Little Princess`
+            caption: `❖ TikTok - CherlynBot`
           });
           
           if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
@@ -2260,7 +2319,7 @@ async function downloadViaApisMsg(platform, url, sock, jid) {
     if (ext === 'mp4') {
       await sock.sendMessage(jid, { 
         video: fs.readFileSync(tmp),
-        caption: `🎥 ${platform} - Little Princess`
+        caption: `🎥 ${platform} - CherlynBot`
       });
     } else if (ext === 'mp3') {
       await sock.sendMessage(jid, { 
@@ -2271,7 +2330,7 @@ async function downloadViaApisMsg(platform, url, sock, jid) {
     } else if (ext === 'jpg' || ext === 'png') {
       await sock.sendMessage(jid, { 
         image: fs.readFileSync(tmp),
-        caption: `🖼️ ${platform} - Little Princess`
+        caption: `🖼️ ${platform} - CherlynBot`
       });
     }
     

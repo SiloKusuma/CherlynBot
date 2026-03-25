@@ -1,8 +1,6 @@
 module.exports = {
 
-  bannerImage: 'https://silokusuma.github.io/repo-img/745620.png',
-  
-  menuChannelLink: 'https://whatsapp.com/channel/0029VbC7ha06buMIrABf6d1X/101', 
+  bannerImage: 'https://i.pinimg.com/736x/c0/39/93/c0399391ba2c83c316c3e651ce6f2bbe.jpg', 
 
   tiktokNoKeyApis: [
     'https://api.meme4d.com/api/tiktok?url={url}',
